@@ -4,8 +4,6 @@
 
 A single-file, zero-dependency **design-pattern board** for documenting a brand's design tokens in one place: colors, typography, border radius, borders, and shadows. Edit everything live, then export the board as an image or JSON.
 
-🇮🇷 [نسخهٔ فارسی](#-الگوی-طراحی--teconize)
-
 <p align="center">
   <img src="./preview.png" alt="Preview" width="600" />
 </p>
