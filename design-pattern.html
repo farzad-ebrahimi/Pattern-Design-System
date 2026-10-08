@@ -455,7 +455,7 @@
       display: grid;
       grid-template-columns: repeat(var(--cols, 2), minmax(0, 1fr));
       gap: 24px;
-      align-items: start
+      align-items: stretch
     }
 
     .sheet[data-dev=phone] #secs {
@@ -467,7 +467,9 @@
       border: var(--bw, 1px) solid var(--bc, var(--ln));
       box-shadow: var(--sd, none);
       border-radius: var(--rad);
-      padding: 24px
+      padding: 24px;
+      height: 100%;
+      box-sizing: border-box
     }
 
     .sheet[data-dev=phone] .sec {
@@ -1065,7 +1067,7 @@
       const a = `data-g="${g}" data-i="${i}"`,
       num = (k, l, ex = '') => `<label class="lb">${l}<input type="number" ${ex} ${a} data-k="${k}" value="${it[k]}"></label>`;
       if (g === 'r') return `<input type="range" class="ui" min="0" max="100" ${a} data-k="v" value="${it.v}" aria-label="Radius"><div class="ctl ui">${num('v', 'Radius (px)', 'min="0" max="999"')}</div>`;
-      if (g === 'b') return `<div class="ctl ui">${num('w', 'Width (px)', 'min="0" max="64"')}<label class="lb">Color<input type="color" ${a} data-k="c" value="${it.c || bcDef()}"></label></div>`;
+      if (g === 'b') return `<input type="range" class="ui" min="0" max="20" ${a} data-k="w" value="${it.w}" aria-label="Border width"><div class="ctl ui">${num('w', 'Width (px)', 'min="0" max="64"')}<label class="lb">Color<input type="color" ${a} data-k="c" value="${it.c || bcDef()}"></label></div>`;
       return `<div class="ctl ui">${num('x', 'X')}${num('y', 'Y')}${num('b', 'Blur')}${num('s', 'Spread')}${num('o', 'Opacity', 'step=".05" min="0" max="1"')}<label class="lb">Color<input type="color" ${a} data-k="c" value="${it.c}"></label></div>`
     }
     function itemHTML(g, it, i) {
@@ -1088,6 +1090,7 @@
       if (k === 'n' || k === 'c') it[k] = t.value;
       else { let v = +t.value; if (!isFinite(v)) v = 0; if (k === 'o') v = Math.min(1, Math.max(0, v)); if (k === 'w') v = Math.min(64, Math.max(0, v)); if (k === 'v') v = Math.min(999, Math.max(0, v)); it[k] = v }
       if (k === 'v') document.querySelectorAll(`[data-g="r"][data-i="${i}"][data-k="v"]`).forEach(n => { if (n !== t) n.value = it.v });
+      if (k === 'w') document.querySelectorAll(`[data-g="b"][data-i="${i}"][data-k="w"]`).forEach(n => { if (n !== t) n.value = it.w });
       refreshItem(g, i); tok(); persist()
     });
     tk.addEventListener('click', async e => {
