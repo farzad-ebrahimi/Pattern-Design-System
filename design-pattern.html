@@ -965,8 +965,9 @@
     let fopen = false, d = DEF(), dev = innerWidth < 700 ? 'phone' : 'laptop', open = -1;
     function norm(x) {
       const o = { ...DEF(), ...x };
-      o.fonts = [...DEF().fonts, ...(Array.isArray(x.fonts) ? x.fonts : []).filter(f => f && f.u)];
-      o.brand = { ...B0(), ...(x.brand && typeof x.brand === 'object' ? x.brand : {}) };
+o.fonts = Array.isArray(x.fonts)
+  ? x.fonts.filter(f => f && typeof f.n === 'string' && typeof f.f === 'string' && ['fa', 'en', 'both'].includes(f.l) && (f.u ? /^data:/.test(f.u) : ['Arad', 'Oswald'].includes(f.f)))
+  : DEF().fonts;      o.brand = { ...B0(), ...(x.brand && typeof x.brand === 'object' ? x.brand : {}) };
       if (typeof o.brand.n !== 'string' || !o.brand.n.trim()) o.brand.n = B0().n;
       if (!(typeof o.brand.l === 'string' && /^data:image\//.test(o.brand.l))) o.brand.l = null;
       if (!Array.isArray(x.rads) && x.rad != null) o.rads = [{ n: 'Radius 1', v: +x.rad || 0 }];
@@ -1036,8 +1037,7 @@
     function dl(url, name) { const a = document.createElement('a'); a.href = url; a.download = name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 4000) }
     const LG = { fa: 'فارسی', en: 'English', both: 'فارسی + English' }, SM = { fa: 'طراحی با هدف ۱۲۳', en: 'Design with intention 123', both: 'Aa  طراحی با هدف' };
     const fam = f => `font-family:'${f.f}',Arad,Oswald,Tahoma,sans-serif`;
-    function fontsHTML() { return `<div class="sh"><span class="t">Typography</span><button class="b sq ui" data-fa="plus" title="افزودن فونت">${I.plus}</button></div><div class="fl">${d.fonts.map((f, i) => `<div class="fc"><div class="fn" dir="auto" style="${fam(f)}">${esc(f.n)}</div><div class="fs" dir="auto" style="${fam(f)}">${SM[f.l]}</div><small class="lg">${LG[f.l]}</small>${f.u ? `<button class="x ui" data-fa="del" data-i="${i}" title="حذف فونت">${I.x}</button>` : ''}</div>`).join('')}</div>${fopen ? `<div class="add ui"><input type="file" id="ff" accept=".woff,.woff2,.ttf,.otf"><input type="text" id="fnm" dir="auto" placeholder="نام فونت (اختیاری)"><select id="fl"><option value="fa">فارسی</option><option value="en">English</option><option value="both">فارسی + English</option></select><button class="b pri" data-fa="addf">افزودن</button></div>` : ''}` }
-    function installFonts() { $('#uf').textContent = d.fonts.filter(f => f.u).map(f => `@font-face{font-family:'${f.f}';src:url(${f.u});font-display:block}`).join('\n') }
+function fontsHTML() { return `<div class="sh"><span class="t">Typography</span><button class="b sq ui" data-fa="plus" title="افزودن فونت">${I.plus}</button></div><div class="fl">${d.fonts.map((f, i) => `<div class="fc"><div class="fn" dir="auto" style="${fam(f)}">${esc(f.n)}</div><div class="fs" dir="auto" style="${fam(f)}">${SM[f.l]}</div><small class="lg">${LG[f.l]}</small><button class="x ui" data-fa="del" data-i="${i}" title="حذف فونت">${I.x}</button></div>`).join('')}</div>${d.fonts.length || fopen ? '' : '<p class="hint ui">فونتی وجود ندارد. برای افزودن، دکمهٔ + را بزن.</p>'}${fopen ? `<div class="add ui"><input type="file" id="ff" accept=".woff,.woff2,.ttf,.otf"><input type="text" id="fnm" dir="auto" placeholder="نام فونت (اختیاری)"><select id="fl"><option value="fa">فارسی</option><option value="en">English</option><option value="both">فارسی + English</option></select><button class="b pri" data-fa="addf">افزودن</button></div>` : ''}` }    function installFonts() { $('#uf').textContent = d.fonts.filter(f => f.u).map(f => `@font-face{font-family:'${f.f}';src:url(${f.u});font-display:block}`).join('\n') }
     function addFont() { const f = $('#ff').files[0]; if (!f) return toast('اول فایل فونت را انتخاب کن'); const r = new FileReader(); r.onload = () => { d.fonts.push({ n: $('#fnm').value.trim() || f.name.replace(/\.[^.]+$/, ''), f: 'U' + Date.now(), l: $('#fl').value, u: r.result }); fopen = false; installFonts(); render(); toast('فونت اضافه شد') }; r.onerror = () => toast('خواندن فایل ناموفق بود'); r.readAsDataURL(f) }
     $('#fonts').addEventListener('click', e => {
       const b = e.target.closest('[data-fa]'); if (!b) return; const a = b.dataset.fa;
